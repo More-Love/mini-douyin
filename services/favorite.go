@@ -2,10 +2,9 @@ package services
 
 import (
 	"errors"
-	"mini-douyin/models"
 )
 
-func GetUserFavorites(userID uint) ([]models.Video, error) {
+func GetUserFavorites(userID uint) ([]uint, error) {
 	favorites, err := userRepo.GetFavorites(userID)
 	if err != nil {
 		return nil, errors.New("获取收藏失败")

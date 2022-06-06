@@ -32,7 +32,7 @@ func PublishAction(c *gin.Context) {
 	uid := services.GetUID(request.Token)
 	fileName := uuid.New().String() + request.Data.Filename
 	path := "videos/" + fileName
-	c.SaveUploadedFile(request.Data, "./static/" + path)
+	c.SaveUploadedFile(request.Data, "./static/"+path)
 
 	err := services.PublishVideo(uid, request.Title, path)
 
@@ -72,7 +72,6 @@ func PublishList(c *gin.Context) {
 	}
 
 	uid := services.GetUID(request.Token)
-
 
 	videoIDs, err := services.GetVideosByAuthor(request.UserID)
 	videos := make([]Video, len(videoIDs))

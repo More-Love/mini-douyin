@@ -32,13 +32,13 @@ func (m *UserRepository) Create(name string, password string) (uint, error) {
 
 func (m *UserRepository) GetFollowers(id uint) ([]models.Followship, error) {
 	var followships []models.Followship
-	err := m.db.Model(&models.Followship{}).Where("id = ?", id).Find(&followships).Error
+	err := m.db.Model(&models.Followship{UserID: id}).Find(&followships).Error
 	return followships, err
 }
 
 func (m *UserRepository) GetFollowees(id uint) ([]models.Followship, error) {
 	var followships []models.Followship
-	err := m.db.Model(&models.Followship{}).Where("follower_id = ?", id).Find(&followships).Error
+	err := m.db.Model(&models.Followship{FollowerID: id}).Find(&followships).Error
 	return followships, err
 }
 
@@ -83,10 +83,17 @@ func (m *UserRepository) CheckFavorite(userID uint, videoID uint) (bool, error) 
 	return cnt > 0, err
 }
 
-func (m *UserRepository) GetFavorites(id uint) ([]models.Video, error) {
+func (m *UserRepository) GetFavorites(id uint) ([]uint, error) {
 	var videos []models.Video
 	err := m.db.Model(idToUser(id)).Association("Favorites").Find(&videos)
-	return videos, err
+	if err != nil {
+		return nil, err
+	}
+	videoIDs := make([]uint, len(videos))
+	for i, video := range videos {
+		videoIDs[i] = video.ID
+	}
+	return videoIDs, nil
 }
 
 func (m *UserRepository) AddFavorite(userID uint, videoID uint) error {

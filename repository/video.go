@@ -53,6 +53,12 @@ func (m *VideoRepository) CountComments(videoID uint) int64 {
 	return count
 }
 
+func (m *VideoRepository) GetComment(commentID uint) (*models.Comment, error) {
+	comment := models.Comment{}
+	err := m.db.First(&comment, commentID).Error
+	return &comment, err
+}
+
 func (m *VideoRepository) AddComment(comment *models.Comment) error {
 	return m.db.Model(idToVideo(comment.VideoID)).Association("Comments").Append(comment)
 }
@@ -65,7 +71,6 @@ func (m *VideoRepository) CountFavorited(videoID uint) int64 {
 	count := m.db.Model(idToVideo(videoID)).Association("FavoritedBy").Count()
 	return count
 }
-
 
 func idToVideo(id uint) *models.Video {
 	video := &models.Video{}

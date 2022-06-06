@@ -22,19 +22,16 @@ func init() {
 		panic(err)
 	}
 
-	models := []any{
+	err = db.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(
 		&models.Video{},
 		&models.User{},
 		&models.Comment{},
 		&models.Followship{},
 		&models.Favorite{},
-	}
+	)
 
-	for _, model := range models {
-		err = db.AutoMigrate(model)
-		if err != nil {
-			panic(err)
-		}
+	if err != nil {
+		panic(err)
 	}
 
 	UserRepo = &UserRepository{db}

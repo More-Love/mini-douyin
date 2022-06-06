@@ -5,7 +5,7 @@ import (
 	"mini-douyin/models"
 )
 
-func GetComments(videoID uint) ([]models.Comment, error) {
+func GetVideoComments(videoID uint) ([]models.Comment, error) {
 	comments, err := videoRepo.GetComments(videoID)
 	if err != nil {
 		return nil, errors.New("获取评论失败")
@@ -13,21 +13,29 @@ func GetComments(videoID uint) ([]models.Comment, error) {
 	return comments, nil
 }
 
-func CountComments(videoID uint) int64 {
+func CountVideoComments(videoID uint) int64 {
 	count := videoRepo.CountComments(videoID)
 	return count
 }
 
-func AddComment(userID uint, videoID uint, content string) error {
+func GetComment(commentID uint) (*models.Comment, error) {
+	comment, err := videoRepo.GetComment(commentID)
+	if err != nil {
+		return nil, errors.New("获取评论失败")
+	}
+	return comment, nil
+}
+
+func AddComment(userID uint, videoID uint, content string) (uint, error) {
 	comment := models.Comment{
 		UserID:  userID,
 		VideoID: videoID,
 		Content: content,
 	}
 	if err := videoRepo.AddComment(&comment); err != nil {
-		return errors.New("添加评论失败")
+		return 0, errors.New("添加评论失败")
 	}
-	return nil
+	return comment.ID, nil
 }
 
 func DeleteComment(commentID uint) error {

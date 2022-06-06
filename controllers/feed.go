@@ -8,7 +8,7 @@ import (
 )
 
 type FeedRequest struct {
-	LatestTime int64 `form:"latest_time"`
+	LatestTime int64  `form:"latest_time"`
 	Token      string `form:"token"`
 }
 
@@ -35,7 +35,6 @@ func Feed(c *gin.Context) {
 	} else {
 		tm = time.UnixMilli(request.LatestTime)
 	}
-
 
 	uid := services.GetUID(request.Token)
 	videoIDs, err := services.GetVideoFeed(tm, 20)

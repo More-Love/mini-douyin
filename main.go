@@ -18,15 +18,38 @@ func main() {
 		user.GET("/", controllers.UserInfo)
 	}
 
-	feed := douyin.Group("/feed")
-	{
-		feed.GET("/", controllers.Feed)
-	}
+	douyin.GET("/feed", controllers.Feed)
 
 	publish := douyin.Group("/publish")
 	{
 		publish.POST("/action/", controllers.PublishAction)
 		publish.GET("/list/", controllers.PublishList)
+	}
+
+	favorite := douyin.Group("/favorite")
+	{
+		favorite.POST("/action/", controllers.FavoriteAction)
+		favorite.GET("/list/", controllers.FavoriteList)
+	}
+
+	comment := douyin.Group("/comment")
+	{
+		comment.POST("/action/", controllers.CommentAction)
+		comment.GET("/list/", controllers.CommentList)
+	}
+
+	relation := douyin.Group("/relation")
+	{
+		relation.POST("/action/", controllers.FollowAction)
+		follow := relation.Group("/follow")
+		{
+			follow.GET("/list/", controllers.FollowList)
+		}
+
+		follower := relation.Group("/follower")
+		{
+			follower.GET("/list/", controllers.FollowerList)
+		}
 	}
 
 	r.Static("/static", "./static")

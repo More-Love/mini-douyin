@@ -35,9 +35,9 @@ func GetVideosByAuthor(authorID uint) ([]uint, error) {
 
 func PublishVideo(userID uint, title string, path string) error {
 	video := models.Video{
-		UserID:  userID,
-		Title:   title,
-		PlayURL: "http://49.233.250.173:8080/static/" + path,
+		UserID:   userID,
+		Title:    title,
+		PlayURL:  "http://49.233.250.173:8080/static/" + path,
 		CoverURL: "https://picsum.photos/200/300/?random",
 	}
 

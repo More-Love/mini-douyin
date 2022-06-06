@@ -23,6 +23,13 @@ type Video struct {
 	Title         string `json:"title"`          // 视频标题
 }
 
+type Comment struct {
+	Content    string `json:"content"`     // 评论内容
+	CreateDate string `json:"create_date"` // 评论发布日期，格式 mm-dd
+	ID         uint   `json:"id"`          // 评论id
+	User       User   `json:"user"`        // 评论用户信息
+}
+
 func getUserInfo(sourceID uint, targetID uint) *User {
 	name, err := services.GetUserName(targetID)
 	if err != nil {
@@ -54,7 +61,7 @@ func getVideoInfo(sourceID uint, targetID uint) *Video {
 		return nil
 	}
 
-	commentCount := services.CountComments(targetID)
+	commentCount := services.CountVideoComments(targetID)
 	favoriteCount := services.CountFavorited(targetID)
 	isFavorite := services.CheckFavorite(sourceID, targetID)
 	author := getUserInfo(sourceID, videoModel.UserID)
@@ -68,5 +75,21 @@ func getVideoInfo(sourceID uint, targetID uint) *Video {
 		PlayURL:       videoModel.PlayURL,
 		CoverURL:      videoModel.CoverURL,
 		Title:         videoModel.Title,
+	}
+}
+
+func getCommentInfo(sourceID uint, targetID uint) *Comment {
+	commentModel, err := services.GetComment(targetID)
+	if err != nil {
+		return nil
+	}
+
+	user := getUserInfo(sourceID, commentModel.UserID)
+
+	return &Comment{
+		Content:    commentModel.Content,
+		CreateDate: commentModel.CreatedAt.Format("01-02"),
+		ID:         targetID,
+		User:       *user,
 	}
 }
