@@ -7,7 +7,7 @@ type Video struct {
 	PlayURL     string
 	CoverURL    string
 	Title       string
-	AuthorID      uint
-	FavoritedBy []User `gorm:"many2many:video_favorites;"`
-	Comments    []Comment
+	UserID      uint
+	FavoritedBy []*User `gorm:"many2many:favorites;"`
+	Comments    []*Comment
 }

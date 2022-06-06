@@ -8,27 +8,26 @@ import (
 	"mini-douyin/models"
 )
 
-
-
 var (
-	UserRepo *UserRepository
+	UserRepo  *UserRepository
 	VideoRepo *VideoRepository
 	TokenRepo *TokenRepository
 )
 
 func init() {
-	dsn := "user:pass@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:pass@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	models := []any {
-		&models.User{},
+	models := []any{
 		&models.Video{},
+		&models.User{},
 		&models.Comment{},
 		&models.Followship{},
+		&models.Favorite{},
 	}
 
 	for _, model := range models {
@@ -40,7 +39,6 @@ func init() {
 
 	UserRepo = &UserRepository{db}
 	VideoRepo = &VideoRepository{db}
-	
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
