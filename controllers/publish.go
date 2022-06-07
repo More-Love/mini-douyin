@@ -1,11 +1,13 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"mime/multipart"
 	"mini-douyin/services"
 	"net/http"
+	"os/exec"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type PublishActionRequest struct {
@@ -30,11 +32,16 @@ func PublishAction(c *gin.Context) {
 	}
 
 	uid := services.GetUID(request.Token)
-	fileName := uuid.New().String() + request.Data.Filename
-	path := "videos/" + fileName
-	c.SaveUploadedFile(request.Data, "./static/"+path)
 
-	err := services.PublishVideo(uid, request.Title, path)
+	fileName := uuid.NewString() + request.Data.Filename
+	path := "videos/" + fileName
+	c.SaveUploadedFile(request.Data, "./static/" + path)
+
+	coverPath := "covers/" + uuid.NewString() + ".jpg"
+	exec.Command("ffmpeg", "-i", "./static/" + path, "-vframes", "1", "-s", "800*600", "-f", "singlejpeg", "./static/" + coverPath).Run()
+
+
+	err := services.PublishVideo(uid, request.Title, path, coverPath)
 
 	if err != nil {
 		c.JSON(http.StatusOK, PublishActionResponse{

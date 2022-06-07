@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"mini-douyin/config"
 	"mini-douyin/models"
 	"mini-douyin/repository"
 	"time"
@@ -33,12 +34,14 @@ func GetVideosByAuthor(authorID uint) ([]uint, error) {
 	return videos, nil
 }
 
-func PublishVideo(userID uint, title string, path string) error {
+func PublishVideo(userID uint, title string, videoPath string, coverPath string) error {
+
+
 	video := models.Video{
 		UserID:   userID,
 		Title:    title,
-		PlayURL:  "http://49.233.250.173:8080/static/" + path,
-		CoverURL: "https://picsum.photos/200/300/?random",
+		PlayURL:  config.Config.StaticBaseURL + videoPath,
+		CoverURL: config.Config.StaticBaseURL + coverPath,
 	}
 
 	if err := videoRepo.Create(&video); err != nil {
