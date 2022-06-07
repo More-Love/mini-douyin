@@ -2,10 +2,13 @@ package repository
 
 import (
 	"context"
+	"mini-douyin/config"
+	"mini-douyin/models"
+	"time"
+
 	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"mini-douyin/models"
 )
 
 var (
@@ -15,9 +18,8 @@ var (
 )
 
 func init() {
-	dsn := "root:pass@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(config.Config.DatabaseDSN), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
@@ -38,8 +40,13 @@ func init() {
 	VideoRepo = &VideoRepository{db}
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: config.Config.RedisAddr,
 	})
 
-	TokenRepo = &TokenRepository{rdb, context.Background()}
+	dur, err := time.ParseDuration(config.Config.TokenDuration)
+	if err != nil {
+		panic(err)
+	}
+
+	TokenRepo = &TokenRepository{rdb, context.Background(), dur}
 }

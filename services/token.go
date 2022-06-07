@@ -2,13 +2,14 @@ package services
 
 import (
 	"errors"
+	"github.com/google/uuid"
 	"mini-douyin/repository"
 )
 
 var tokenRepo = repository.TokenRepo
 
 func UpdateToken(userID uint) (string, error) {
-	token := tokenRepo.GenerateToken()
+	token := uuid.NewString()
 	err := tokenRepo.SetToken(token, userID)
 	if err != nil {
 		return "", errors.New("更新token失败")

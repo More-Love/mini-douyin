@@ -2,26 +2,21 @@ package repository
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/base64"
-	"github.com/go-redis/redis/v8"
 	"strconv"
 	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 type TokenRepository struct {
-	rdb *redis.Client
-	ctx context.Context
-}
-
-func (m *TokenRepository) GenerateToken() string {
-	b := make([]byte, 4)
-	rand.Read(b)
-	return base64.StdEncoding.EncodeToString(b)
+	rdb      *redis.Client
+	ctx      context.Context
+	duration time.Duration
 }
 
 func (m *TokenRepository) SetToken(token string, userID uint) error {
-	return m.rdb.Set(m.ctx, token, strconv.FormatUint(uint64(userID), 10), time.Hour*24).Err()
+
+	return m.rdb.Set(m.ctx, token, strconv.FormatUint(uint64(userID), 10), m.duration).Err()
 }
 
 func (m *TokenRepository) GetUID(token string) uint {
