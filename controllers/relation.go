@@ -78,7 +78,10 @@ func FollowList(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 	followList, err := services.GetUserFollowing(request.UserID)
 
 	userList := make([]User, len(followList))
@@ -122,7 +125,10 @@ func FollowerList(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 	userIDs, err := services.GetUserFollowers(request.UserID)
 	if err != nil {
 		c.JSON(http.StatusOK, FollowerListResponse{

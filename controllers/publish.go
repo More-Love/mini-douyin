@@ -31,15 +31,17 @@ func PublishAction(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 
 	fileName := uuid.NewString() + request.Data.Filename
 	path := "videos/" + fileName
-	c.SaveUploadedFile(request.Data, "./static/" + path)
+	c.SaveUploadedFile(request.Data, "./static/"+path)
 
 	coverPath := "covers/" + uuid.NewString() + ".jpg"
-	exec.Command("ffmpeg", "-i", "./static/" + path, "-vframes", "1", "-s", "800*600", "-f", "singlejpeg", "./static/" + coverPath).Run()
-
+	exec.Command("ffmpeg", "-i", "./static/"+path, "-vframes", "1", "-s", "800*600", "-f", "singlejpeg", "./static/"+coverPath).Run()
 
 	err := services.PublishVideo(uid, request.Title, path, coverPath)
 
@@ -78,7 +80,10 @@ func PublishList(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 
 	videoIDs, err := services.GetVideosByAuthor(request.UserID)
 	videos := make([]Video, len(videoIDs))

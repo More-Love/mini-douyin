@@ -36,7 +36,6 @@ func GetVideosByAuthor(authorID uint) ([]uint, error) {
 
 func PublishVideo(userID uint, title string, videoPath string, coverPath string) error {
 
-
 	video := models.Video{
 		UserID:   userID,
 		Title:    title,

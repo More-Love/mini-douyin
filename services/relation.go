@@ -5,13 +5,9 @@ import (
 )
 
 func GetUserFollowers(id uint) ([]uint, error) {
-	followships, err := userRepo.GetFollowers(id)
+	followerIDs, err := userRepo.GetFollowers(id)
 	if err != nil {
 		return nil, errors.New("获取粉丝失败")
-	}
-	followerIDs := make([]uint, len(followships))
-	for i, v := range followships {
-		followerIDs[i] = v.FollowerID
 	}
 	return followerIDs, nil
 }
@@ -25,13 +21,9 @@ func CountFollowers(id uint) (int64, error) {
 }
 
 func GetUserFollowing(id uint) ([]uint, error) {
-	followships, err := userRepo.GetFollowees(id)
+	followeeIDs, err := userRepo.GetFollowees(id)
 	if err != nil {
 		return nil, errors.New("获取关注失败")
-	}
-	followeeIDs := make([]uint, len(followships))
-	for i, v := range followships {
-		followeeIDs[i] = v.UserID
 	}
 	return followeeIDs, nil
 }

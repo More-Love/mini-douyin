@@ -103,7 +103,10 @@ func UserInfo(c *gin.Context) {
 		})
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 	user := getUserInfo(uid, request.UserID)
 
 	if user == nil {

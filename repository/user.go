@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"mini-douyin/models"
+
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {
@@ -30,22 +31,36 @@ func (m *UserRepository) Create(name string, password string) (uint, error) {
 	return user.ID, err
 }
 
-func (m *UserRepository) GetFollowers(id uint) ([]models.Followship, error) {
+func (m *UserRepository) GetFollowers(id uint) ([]uint, error) {
 	var followships []models.Followship
-	err := m.db.Model(&models.Followship{UserID: id}).Find(&followships).Error
-	return followships, err
+	err := m.db.Where("user_id = ?", id).Select("follower_id").Find(&followships).Error
+	if err != nil {
+		return nil, err
+	}
+	followerIDs := make([]uint, len(followships))
+	for i, followship := range followships {
+		followerIDs[i] = followship.FollowerID
+	}
+	return followerIDs, err
 }
 
-func (m *UserRepository) GetFollowees(id uint) ([]models.Followship, error) {
+func (m *UserRepository) GetFollowees(id uint) ([]uint, error) {
 	var followships []models.Followship
-	err := m.db.Model(&models.Followship{FollowerID: id}).Find(&followships).Error
-	return followships, err
+	err := m.db.Where("follower_id = ?", id).Select("user_id").Find(&followships).Error
+	if err != nil {
+		return nil, err
+	}
+	followeeIDs := make([]uint, len(followships))
+	for i, followship := range followships {
+		followeeIDs[i] = followship.UserID
+	}
+	return followeeIDs, err
 }
 
 func (m *UserRepository) CheckFollow(followerID uint, followeeID uint) bool {
 	var cnt int64
-	err := m.db.Where("follower_id = ? AND user_id = ?", followerID, followeeID).First(&cnt).Error
-	return err != nil
+	m.db.Where("follower_id = ? AND user_id = ?", followerID, followeeID).First(&cnt)
+	return cnt > 0
 }
 
 func (m *UserRepository) AddFollower(followerID uint, followeeID uint) error {

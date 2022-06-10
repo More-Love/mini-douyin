@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"mini-douyin/services"
+
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type User struct {
@@ -28,6 +31,18 @@ type Comment struct {
 	CreateDate string `json:"create_date"` // 评论发布日期，格式 mm-dd
 	ID         uint   `json:"id"`          // 评论id
 	User       User   `json:"user"`        // 评论用户信息
+}
+
+func requireLogin(c *gin.Context, token string) uint {
+	uid := services.GetUID(token)
+	if uid == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status_code":    -1,
+			"status_message": "未登录或登录已过期",
+		})
+		c.Abort()
+	}
+	return uid
 }
 
 func getUserInfo(sourceID uint, targetID uint) *User {

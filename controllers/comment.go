@@ -30,7 +30,11 @@ func CommentAction(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
+
 	if request.ActionType == 1 {
 		id, err := services.AddComment(uid, request.VideoID, request.CommentText)
 		if err != nil {
@@ -92,7 +96,11 @@ func CommentList(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
+
 	comments, err := services.GetVideoComments(request.VideoID)
 	if err != nil {
 		c.JSON(http.StatusOK, CommentListResponse{

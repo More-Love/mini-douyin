@@ -27,7 +27,10 @@ func FavoriteAction(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 	if request.ActionType == 1 {
 		err := services.Favorite(uid, request.VideoID)
 		if err != nil {
@@ -78,7 +81,10 @@ func FavoriteList(c *gin.Context) {
 		return
 	}
 
-	uid := services.GetUID(request.Token)
+	uid := requireLogin(c, request.Token)
+	if uid == 0 {
+		return
+	}
 	videoIDs, err := services.GetUserFavorites(request.UserID)
 	videos := make([]Video, len(videoIDs))
 	for i, videoID := range videoIDs {
