@@ -13,6 +13,7 @@ var videoRepo = repository.VideoRepo
 func GetVideo(videoID uint) (*models.Video, error) {
 	video, err := videoRepo.Get(videoID)
 	if err != nil {
+		logger.Println(err)
 		return nil, errors.New("获取视频失败")
 	}
 	return video, nil
@@ -21,6 +22,7 @@ func GetVideo(videoID uint) (*models.Video, error) {
 func GetVideoFeed(latestTime time.Time, limit int) ([]uint, error) {
 	videos, err := videoRepo.GetFeed(latestTime, limit)
 	if err != nil {
+		logger.Println(err)
 		return nil, errors.New("获取视频列表失败")
 	}
 	return videos, nil
@@ -29,6 +31,7 @@ func GetVideoFeed(latestTime time.Time, limit int) ([]uint, error) {
 func GetVideosByAuthor(authorID uint) ([]uint, error) {
 	videos, err := videoRepo.GetVideosByAuthor(authorID)
 	if err != nil {
+		logger.Println(err)
 		return nil, errors.New("获取视频列表失败")
 	}
 	return videos, nil
@@ -44,6 +47,7 @@ func PublishVideo(userID uint, title string, videoPath string, coverPath string)
 	}
 
 	if err := videoRepo.Create(&video); err != nil {
+		logger.Println(err)
 		return errors.New("发布视频失败")
 	}
 	return nil

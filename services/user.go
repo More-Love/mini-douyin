@@ -11,6 +11,7 @@ func RegisterUser(userName string, password string) (uint, error) {
 
 	// 先检查用户名是否已经存在
 	if _, err := userRepo.GetID(userName); err == nil {
+		logger.Println(err)
 		return 0, errors.New("用户名已经存在")
 	}
 
@@ -18,6 +19,7 @@ func RegisterUser(userName string, password string) (uint, error) {
 	var err error
 	// 创建用户
 	if id, err = repository.UserRepo.Create(userName, password); err != nil {
+		logger.Println(err)
 		return 0, errors.New("创建用户失败")
 	}
 
@@ -29,15 +31,18 @@ func LoginUser(userName string, password string) (uint, error) {
 	// 检查用户名是否存在
 	id, err := userRepo.GetID(userName)
 	if err != nil {
+		logger.Println(err)
 		return 0, errors.New("用户名不存在")
 	}
 	user, err := userRepo.Get(id)
 	if err != nil {
+		logger.Println(err)
 		return 0, errors.New("获取用户信息失败")
 	}
 
 	// 检查密码是否正确
 	if user.Password != password {
+		logger.Println(err)
 		return 0, errors.New("密码错误")
 	}
 
@@ -47,6 +52,7 @@ func LoginUser(userName string, password string) (uint, error) {
 func GetUserName(id uint) (string, error) {
 	user, err := userRepo.Get(id)
 	if err != nil {
+		logger.Println(err)
 		return "", errors.New("获取用户信息失败")
 	}
 	return user.UserName, nil
@@ -55,6 +61,7 @@ func GetUserName(id uint) (string, error) {
 func CountUserFollowers(id uint) (int64, error) {
 	count, err := userRepo.CountFollowers(id)
 	if err != nil {
+		logger.Println(err)
 		return 0, errors.New("获取粉丝数失败")
 	}
 	return count, nil

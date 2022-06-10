@@ -59,7 +59,7 @@ func (m *UserRepository) GetFollowees(id uint) ([]uint, error) {
 
 func (m *UserRepository) CheckFollow(followerID uint, followeeID uint) (bool, error) {
 	var cnt int64
-	err := m.db.Model(&models.Followship{}).Where("follower_id = ? AND user_id = ?", followerID, followeeID).First(&cnt).Error
+	err := m.db.Model(&models.Followship{}).Where("follower_id = ? AND user_id = ?", followerID, followeeID).Count(&cnt).Error
 	return cnt > 0, err
 }
 

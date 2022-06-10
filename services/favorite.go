@@ -7,6 +7,7 @@ import (
 func GetUserFavorites(userID uint) ([]uint, error) {
 	favorites, err := userRepo.GetFavorites(userID)
 	if err != nil {
+		logger.Println(err)
 		return nil, errors.New("获取收藏失败")
 	}
 	return favorites, nil
@@ -14,11 +15,16 @@ func GetUserFavorites(userID uint) ([]uint, error) {
 
 func CheckFavorite(userID uint, videoID uint) bool {
 	favorite, err := userRepo.CheckFavorite(userID, videoID)
-	return favorite && err == nil
+	if err != nil {
+		logger.Println(err)
+		return false
+	}
+	return favorite
 }
 
 func Favorite(userID uint, videoID uint) error {
 	if err := userRepo.AddFavorite(userID, videoID); err != nil {
+		logger.Println(err)
 		return errors.New("收藏失败")
 	}
 	return nil
@@ -26,6 +32,7 @@ func Favorite(userID uint, videoID uint) error {
 
 func Unfavorite(userID uint, videoID uint) error {
 	if err := userRepo.DeleteFavorite(userID, videoID); err != nil {
+		logger.Println(err)
 		return errors.New("取消收藏失败")
 	}
 	return nil

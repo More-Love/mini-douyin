@@ -7,10 +7,11 @@ import (
 )
 
 var Config struct {
-	DatabaseDSN   string
-	RedisAddr     string
-	TokenDuration string
-	StaticBaseURL string
+	DatabaseDSN         string
+	RedisAddr           string
+	TokenDuration       string
+	StaticBaseURL       string
+	ServiceLoggerOutput string
 }
 
 func init() {

@@ -7,6 +7,7 @@ import (
 func GetUserFollowers(id uint) ([]uint, error) {
 	followerIDs, err := userRepo.GetFollowers(id)
 	if err != nil {
+		logger.Println(err)
 		return nil, errors.New("获取粉丝失败")
 	}
 	return followerIDs, nil
@@ -15,6 +16,7 @@ func GetUserFollowers(id uint) ([]uint, error) {
 func CountFollowers(id uint) (int64, error) {
 	count, err := userRepo.CountFollowers(id)
 	if err != nil {
+		logger.Println(err)
 		return 0, errors.New("获取粉丝数量失败")
 	}
 	return count, nil
@@ -23,6 +25,7 @@ func CountFollowers(id uint) (int64, error) {
 func GetUserFollowing(id uint) ([]uint, error) {
 	followeeIDs, err := userRepo.GetFollowees(id)
 	if err != nil {
+		logger.Println(err)
 		return nil, errors.New("获取关注失败")
 	}
 	return followeeIDs, nil
@@ -31,6 +34,7 @@ func GetUserFollowing(id uint) ([]uint, error) {
 func CountUserFollowing(id uint) (int64, error) {
 	count, err := userRepo.CountFollowees(id)
 	if err != nil {
+		logger.Println(err)
 		return 0, errors.New("获取关注数量失败")
 	}
 	return count, nil
@@ -38,11 +42,16 @@ func CountUserFollowing(id uint) (int64, error) {
 
 func CheckFollow(followerID uint, followeeID uint) bool {
 	hasFollowship, err := userRepo.CheckFollow(followerID, followeeID)
-	return hasFollowship && err == nil
+	if err != nil {
+		logger.Println(err)
+		return false
+	}
+	return hasFollowship
 }
 
 func Follow(followerID uint, followeeID uint) error {
 	if err := userRepo.AddFollower(followerID, followeeID); err != nil {
+		logger.Println(err)
 		return errors.New("关注失败")
 	}
 	return nil
@@ -50,6 +59,7 @@ func Follow(followerID uint, followeeID uint) error {
 
 func Unfollow(followerID uint, followeeID uint) error {
 	if err := userRepo.DeleteFollower(followerID, followeeID); err != nil {
+		logger.Println(err)
 		return errors.New("取消关注失败")
 	}
 	return nil

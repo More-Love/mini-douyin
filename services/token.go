@@ -12,6 +12,7 @@ func UpdateToken(userID uint) (string, error) {
 	token := uuid.NewString()
 	err := tokenRepo.SetToken(token, userID)
 	if err != nil {
+		logger.Println(err)
 		return "", errors.New("更新token失败")
 	}
 	return token, nil
