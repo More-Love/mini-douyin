@@ -57,10 +57,10 @@ func (m *UserRepository) GetFollowees(id uint) ([]uint, error) {
 	return followeeIDs, err
 }
 
-func (m *UserRepository) CheckFollow(followerID uint, followeeID uint) bool {
+func (m *UserRepository) CheckFollow(followerID uint, followeeID uint) (bool, error) {
 	var cnt int64
-	m.db.Where("follower_id = ? AND user_id = ?", followerID, followeeID).First(&cnt)
-	return cnt > 0
+	err := m.db.Model(&models.Followship{}).Where("follower_id = ? AND user_id = ?", followerID, followeeID).First(&cnt).Error
+	return cnt > 0, err
 }
 
 func (m *UserRepository) AddFollower(followerID uint, followeeID uint) error {
@@ -76,13 +76,13 @@ func (m *UserRepository) DeleteFollower(followerID uint, followeeID uint) error 
 
 func (m *UserRepository) CountFollowers(id uint) (int64, error) {
 	var count int64
-	err := m.db.Model(&models.Followship{UserID: id}).Count(&count).Error
+	err := m.db.Model(&models.Followship{}).Where("user_id = ?", id).Count(&count).Error
 	return count, err
 }
 
 func (m *UserRepository) CountFollowees(id uint) (int64, error) {
 	var count int64
-	err := m.db.Model(&models.Followship{FollowerID: id}).Count(&count).Error
+	err := m.db.Model(&models.Followship{}).Where("follower_id = ?", id).Count(&count).Error
 	return count, err
 }
 
@@ -94,7 +94,7 @@ func (m *UserRepository) GetVideos(id uint) ([]models.Video, error) {
 
 func (m *UserRepository) CheckFavorite(userID uint, videoID uint) (bool, error) {
 	var cnt int64
-	err := m.db.Where("user_id = ? AND video_id = ?", userID, videoID).Count(&cnt).Error
+	err := m.db.Model(&models.Favorite{}).Where("user_id = ? AND video_id = ?", userID, videoID).Count(&cnt).Error
 	return cnt > 0, err
 }
 

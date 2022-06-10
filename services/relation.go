@@ -37,8 +37,8 @@ func CountUserFollowing(id uint) (int64, error) {
 }
 
 func CheckFollow(followerID uint, followeeID uint) bool {
-	hasFollowship := userRepo.CheckFollow(followerID, followeeID)
-	return hasFollowship
+	hasFollowship, err := userRepo.CheckFollow(followerID, followeeID)
+	return hasFollowship && err == nil
 }
 
 func Follow(followerID uint, followeeID uint) error {

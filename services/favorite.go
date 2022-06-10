@@ -14,10 +14,7 @@ func GetUserFavorites(userID uint) ([]uint, error) {
 
 func CheckFavorite(userID uint, videoID uint) bool {
 	favorite, err := userRepo.CheckFavorite(userID, videoID)
-	if err != nil {
-		return false
-	}
-	return favorite
+	return favorite && err == nil
 }
 
 func Favorite(userID uint, videoID uint) error {
