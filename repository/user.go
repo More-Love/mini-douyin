@@ -22,10 +22,10 @@ func (m *UserRepository) Get(id uint) (*models.User, error) {
 	return user, err
 }
 
-func (m *UserRepository) Create(name string, password string) (uint, error) {
+func (m *UserRepository) Create(name string, password [32]byte) (uint, error) {
 	user := &models.User{
 		UserName: name,
-		Password: password,
+		Password: string(password[:]),
 	}
 	err := m.db.Create(user).Error
 	return user.ID, err

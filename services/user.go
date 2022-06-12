@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"crypto/sha256"
 	"mini-douyin/repository"
 )
 
@@ -15,10 +16,12 @@ func RegisterUser(userName string, password string) (uint, error) {
 		return 0, errors.New("用户名已经存在")
 	}
 
+	passwdHash := sha256.Sum256([]byte(password))
+
 	var id uint
 	var err error
 	// 创建用户
-	if id, err = repository.UserRepo.Create(userName, password); err != nil {
+	if id, err = repository.UserRepo.Create(userName, passwdHash); err != nil {
 		logger.Println(err)
 		return 0, errors.New("创建用户失败")
 	}
@@ -40,8 +43,10 @@ func LoginUser(userName string, password string) (uint, error) {
 		return 0, errors.New("获取用户信息失败")
 	}
 
+	passwdHash := sha256.Sum256([]byte(password))
+
 	// 检查密码是否正确
-	if user.Password != password {
+	if user.Password != string(passwdHash[:]) {
 		logger.Println(err)
 		return 0, errors.New("密码错误")
 	}
