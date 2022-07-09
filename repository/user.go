@@ -25,7 +25,7 @@ func (m *UserRepository) Get(id int64) (*models.User, error) {
 func (m *UserRepository) Create(name string, password [32]byte) (int64, error) {
 	user := &models.User{
 		UserName: name,
-		Password: string(password[:]),
+		Password: password[:],
 	}
 	err := m.db.Create(user).Error
 	return user.ID, err

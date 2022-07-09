@@ -3,6 +3,7 @@ package services
 import (
 	"crypto/sha256"
 	"errors"
+	"bytes"
 	"mini-douyin/repository"
 )
 
@@ -46,7 +47,7 @@ func LoginUser(userName string, password string) (int64, error) {
 	passwdHash := sha256.Sum256([]byte(password))
 
 	// 检查密码是否正确
-	if user.Password != string(passwdHash[:]) {
+	if bytes.Equal(user.Password, passwdHash[:]) {
 		logger.Println(err)
 		return 0, errors.New("密码错误")
 	}

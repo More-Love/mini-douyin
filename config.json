@@ -1,5 +1,5 @@
 {
-    "DatabaseDSN": "root:pass@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local",
+    "DatabaseDSN": "postgre:pass@tcp(127.0.0.1:5432)/douyin?charset=utf8mb4&parseTime=True&loc=Local",
     "RedisAddr" : "localhost:6379",
     "TokenDuration" : "24h",
     "StaticBaseURL": "http://49.233.250.173:8080/static/"

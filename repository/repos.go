@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -19,12 +19,12 @@ var (
 
 func init() {
 
-	db, err := gorm.Open(mysql.Open(config.Config.DatabaseDSN), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(config.Config.DatabaseDSN), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	err = db.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(
+	err = db.AutoMigrate(
 		&models.Video{},
 		&models.User{},
 		&models.Comment{},
