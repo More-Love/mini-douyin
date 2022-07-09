@@ -61,7 +61,7 @@ func PublishAction(c *gin.Context) {
 
 type PublishListRequest struct {
 	Token  string `form:"token"`
-	UserID uint   `form:"user_id"`
+	UserID int64  `form:"user_id"`
 }
 
 type PublishListResponse struct {

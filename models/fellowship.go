@@ -1,6 +1,6 @@
 package models
 
 type Followship struct {
-	FollowerID uint `gorm:"primaryKey"`
-	UserID     uint `gorm:"primaryKey"`
+	FollowerID int64 `gorm:"primaryKey"`
+	UserID     int64 `gorm:"primaryKey"`
 }

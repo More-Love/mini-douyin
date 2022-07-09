@@ -10,7 +10,7 @@ import (
 
 var videoRepo = repository.VideoRepo
 
-func GetVideo(videoID uint) (*models.Video, error) {
+func GetVideo(videoID int64) (*models.Video, error) {
 	video, err := videoRepo.Get(videoID)
 	if err != nil {
 		logger.Println(err)
@@ -19,7 +19,7 @@ func GetVideo(videoID uint) (*models.Video, error) {
 	return video, nil
 }
 
-func GetVideoFeed(latestTime time.Time, limit int) ([]uint, error) {
+func GetVideoFeed(latestTime time.Time, limit int) ([]int64, error) {
 	videos, err := videoRepo.GetFeed(latestTime, limit)
 	if err != nil {
 		logger.Println(err)
@@ -28,7 +28,7 @@ func GetVideoFeed(latestTime time.Time, limit int) ([]uint, error) {
 	return videos, nil
 }
 
-func GetVideosByAuthor(authorID uint) ([]uint, error) {
+func GetVideosByAuthor(authorID int64) ([]int64, error) {
 	videos, err := videoRepo.GetVideosByAuthor(authorID)
 	if err != nil {
 		logger.Println(err)
@@ -37,7 +37,7 @@ func GetVideosByAuthor(authorID uint) ([]uint, error) {
 	return videos, nil
 }
 
-func PublishVideo(userID uint, title string, videoPath string, coverPath string) error {
+func PublishVideo(userID int64, title string, videoPath string, coverPath string) error {
 
 	video := models.Video{
 		UserID:   userID,
@@ -53,7 +53,7 @@ func PublishVideo(userID uint, title string, videoPath string, coverPath string)
 	return nil
 }
 
-func CountFavorited(videoID uint) int64 {
+func CountFavorited(videoID int64) int64 {
 	count := videoRepo.CountFavorited(videoID)
 	return count
 }

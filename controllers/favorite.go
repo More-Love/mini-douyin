@@ -8,7 +8,7 @@ import (
 
 type FavoriteActionRequest struct {
 	Token      string `form:"token"`
-	VideoID    uint   `form:"video_id"`
+	VideoID    int64  `form:"video_id"`
 	ActionType int    `form:"action_type"`
 }
 
@@ -62,7 +62,7 @@ func FavoriteAction(c *gin.Context) {
 
 type FavoriteListRequest struct {
 	Token  string `form:"token"`
-	UserID uint   `form:"user_id"`
+	UserID int64  `form:"user_id"`
 }
 
 type FavoriteListResponse struct {

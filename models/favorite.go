@@ -1,6 +1,6 @@
 package models
 
 type Favorite struct {
-	VideoID uint `gorm:"primaryKey"`
-	UserID  uint `gorm:"primaryKey"`
+	VideoID int64 `gorm:"primaryKey"`
+	UserID  int64 `gorm:"primaryKey"`
 }

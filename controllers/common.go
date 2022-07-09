@@ -10,7 +10,7 @@ import (
 type User struct {
 	FollowCount   int64  `json:"follow_count"`   // 关注总数
 	FollowerCount int64  `json:"follower_count"` // 粉丝总数
-	ID            uint   `json:"id"`             // 用户id
+	ID            int64  `json:"id"`             // 用户id
 	IsFollow      bool   `json:"is_follow"`      // true-已关注，false-未关注
 	Name          string `json:"name"`           // 用户名称
 }
@@ -20,7 +20,7 @@ type Video struct {
 	CommentCount  int64  `json:"comment_count"`  // 视频的评论总数
 	CoverURL      string `json:"cover_url"`      // 视频封面地址
 	FavoriteCount int64  `json:"favorite_count"` // 视频的点赞总数
-	ID            uint   `json:"id"`             // 视频唯一标识
+	ID            int64  `json:"id"`             // 视频唯一标识
 	IsFavorite    bool   `json:"is_favorite"`    // true-已点赞，false-未点赞
 	PlayURL       string `json:"play_url"`       // 视频播放地址
 	Title         string `json:"title"`          // 视频标题
@@ -29,11 +29,11 @@ type Video struct {
 type Comment struct {
 	Content    string `json:"content"`     // 评论内容
 	CreateDate string `json:"create_date"` // 评论发布日期，格式 mm-dd
-	ID         uint   `json:"id"`          // 评论id
+	ID         int64  `json:"id"`          // 评论id
 	User       User   `json:"user"`        // 评论用户信息
 }
 
-func requireLogin(c *gin.Context, token string) uint {
+func requireLogin(c *gin.Context, token string) int64 {
 	uid := services.GetUID(token)
 	if uid == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{
@@ -45,7 +45,7 @@ func requireLogin(c *gin.Context, token string) uint {
 	return uid
 }
 
-func getUserInfo(sourceID uint, targetID uint) *User {
+func getUserInfo(sourceID int64, targetID int64) *User {
 	name, err := services.GetUserName(targetID)
 	if err != nil {
 		return nil
@@ -69,7 +69,7 @@ func getUserInfo(sourceID uint, targetID uint) *User {
 	}
 }
 
-func getVideoInfo(sourceID uint, targetID uint) *Video {
+func getVideoInfo(sourceID int64, targetID int64) *Video {
 
 	videoModel, err := services.GetVideo(targetID)
 	if err != nil {
@@ -93,7 +93,7 @@ func getVideoInfo(sourceID uint, targetID uint) *Video {
 	}
 }
 
-func getCommentInfo(sourceID uint, targetID uint) *Comment {
+func getCommentInfo(sourceID int64, targetID int64) *Comment {
 	commentModel, err := services.GetComment(targetID)
 	if err != nil {
 		return nil

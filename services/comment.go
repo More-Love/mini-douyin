@@ -5,7 +5,7 @@ import (
 	"mini-douyin/models"
 )
 
-func GetVideoComments(videoID uint) ([]models.Comment, error) {
+func GetVideoComments(videoID int64) ([]models.Comment, error) {
 	comments, err := videoRepo.GetComments(videoID)
 	if err != nil {
 		logger.Println(err)
@@ -14,12 +14,12 @@ func GetVideoComments(videoID uint) ([]models.Comment, error) {
 	return comments, nil
 }
 
-func CountVideoComments(videoID uint) int64 {
+func CountVideoComments(videoID int64) int64 {
 	count := videoRepo.CountComments(videoID)
 	return count
 }
 
-func GetComment(commentID uint) (*models.Comment, error) {
+func GetComment(commentID int64) (*models.Comment, error) {
 	comment, err := videoRepo.GetComment(commentID)
 	if err != nil {
 		logger.Println(err)
@@ -28,7 +28,7 @@ func GetComment(commentID uint) (*models.Comment, error) {
 	return comment, nil
 }
 
-func AddComment(userID uint, videoID uint, content string) (uint, error) {
+func AddComment(userID int64, videoID int64, content string) (int64, error) {
 	comment := models.Comment{
 		UserID:  userID,
 		VideoID: videoID,
@@ -41,7 +41,7 @@ func AddComment(userID uint, videoID uint, content string) (uint, error) {
 	return comment.ID, nil
 }
 
-func DeleteComment(commentID uint) error {
+func DeleteComment(commentID int64) error {
 	if err := videoRepo.DeleteComment(commentID); err != nil {
 		logger.Println(err)
 		return errors.New("删除评论失败")

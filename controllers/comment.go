@@ -8,10 +8,10 @@ import (
 
 type CommentActionRequest struct {
 	Token       string `form:"token"`
-	VideoID     uint   `form:"video_id"`
+	VideoID     int64  `form:"video_id"`
 	ActionType  int    `form:"action_type"`
 	CommentText string `form:"comment_text"`
-	CommentID   uint   `form:"comment_id"`
+	CommentID   int64  `form:"comment_id"`
 }
 
 type CommentActionResponse struct {
@@ -77,7 +77,7 @@ func CommentAction(c *gin.Context) {
 
 type CommentListRequest struct {
 	Token   string `form:"token"`
-	VideoID uint   `form:"video_id"`
+	VideoID int64  `form:"video_id"`
 }
 
 type CommentListResponse struct {

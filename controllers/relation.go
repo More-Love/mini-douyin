@@ -8,7 +8,7 @@ import (
 
 type FollowActionRequest struct {
 	Token      string `form:"token"`
-	ToUserId   uint   `form:"to_user_id"`
+	ToUserId   int64  `form:"to_user_id"`
 	ActionType int    `form:"action_type"`
 }
 
@@ -59,7 +59,7 @@ func FollowAction(c *gin.Context) {
 
 type FollowListRequest struct {
 	Token  string `form:"token"`
-	UserID uint   `form:"user_id"`
+	UserID int64  `form:"user_id"`
 }
 
 type FollowListResponse struct {
@@ -106,7 +106,7 @@ func FollowList(c *gin.Context) {
 
 type FollowerListRequest struct {
 	Token  string `form:"token"`
-	UserID uint   `form:"user_id"`
+	UserID int64  `form:"user_id"`
 }
 
 type FollowerListResponse struct {

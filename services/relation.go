@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-func GetUserFollowers(id uint) ([]uint, error) {
+func GetUserFollowers(id int64) ([]int64, error) {
 	followerIDs, err := userRepo.GetFollowers(id)
 	if err != nil {
 		logger.Println(err)
@@ -13,7 +13,7 @@ func GetUserFollowers(id uint) ([]uint, error) {
 	return followerIDs, nil
 }
 
-func CountFollowers(id uint) (int64, error) {
+func CountFollowers(id int64) (int64, error) {
 	count, err := userRepo.CountFollowers(id)
 	if err != nil {
 		logger.Println(err)
@@ -22,7 +22,7 @@ func CountFollowers(id uint) (int64, error) {
 	return count, nil
 }
 
-func GetUserFollowing(id uint) ([]uint, error) {
+func GetUserFollowing(id int64) ([]int64, error) {
 	followeeIDs, err := userRepo.GetFollowees(id)
 	if err != nil {
 		logger.Println(err)
@@ -31,7 +31,7 @@ func GetUserFollowing(id uint) ([]uint, error) {
 	return followeeIDs, nil
 }
 
-func CountUserFollowing(id uint) (int64, error) {
+func CountUserFollowing(id int64) (int64, error) {
 	count, err := userRepo.CountFollowees(id)
 	if err != nil {
 		logger.Println(err)
@@ -40,7 +40,7 @@ func CountUserFollowing(id uint) (int64, error) {
 	return count, nil
 }
 
-func CheckFollow(followerID uint, followeeID uint) bool {
+func CheckFollow(followerID int64, followeeID int64) bool {
 	hasFollowship, err := userRepo.CheckFollow(followerID, followeeID)
 	if err != nil {
 		logger.Println(err)
@@ -49,7 +49,7 @@ func CheckFollow(followerID uint, followeeID uint) bool {
 	return hasFollowship
 }
 
-func Follow(followerID uint, followeeID uint) error {
+func Follow(followerID int64, followeeID int64) error {
 	if err := userRepo.AddFollower(followerID, followeeID); err != nil {
 		logger.Println(err)
 		return errors.New("关注失败")
@@ -57,7 +57,7 @@ func Follow(followerID uint, followeeID uint) error {
 	return nil
 }
 
-func Unfollow(followerID uint, followeeID uint) error {
+func Unfollow(followerID int64, followeeID int64) error {
 	if err := userRepo.DeleteFollower(followerID, followeeID); err != nil {
 		logger.Println(err)
 		return errors.New("取消关注失败")

@@ -15,7 +15,7 @@ type LoginOrRegisterRequest struct {
 type LoginOrRegisterResponse struct {
 	StatusCode    int    `json:"status_code"`    // 状态码，0-成功，其他值-失败
 	StatusMessage string `json:"status_message"` // 返回状态描述
-	UserID        uint   `json:"user_id"`        // 用户ID
+	UserID        int64  `json:"user_id"`        // 用户ID
 	Token         string `json:"token"`          // 用户鉴权token
 }
 
@@ -84,7 +84,7 @@ func Register(c *gin.Context) {
 }
 
 type UserInfoRequest struct {
-	UserID uint   `form:"user_id"`
+	UserID int64  `form:"user_id"`
 	Token  string `form:"token"`
 }
 

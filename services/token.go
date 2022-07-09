@@ -8,7 +8,7 @@ import (
 
 var tokenRepo = repository.TokenRepo
 
-func UpdateToken(userID uint) (string, error) {
+func UpdateToken(userID int64) (string, error) {
 	token := uuid.NewString()
 	err := tokenRepo.SetToken(token, userID)
 	if err != nil {
@@ -18,6 +18,6 @@ func UpdateToken(userID uint) (string, error) {
 	return token, nil
 }
 
-func GetUID(token string) uint {
+func GetUID(token string) int64 {
 	return tokenRepo.GetUID(token)
 }
